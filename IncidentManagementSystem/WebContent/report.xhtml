@@ -1,0 +1,27 @@
+<ui:composition template="templates/master-page.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<ui:define name="title">Incident Report</ui:define>
+
+	<ui:define name="content">
+		<script type="text/javascript">
+			$(document).ready(
+					function() {
+						var $menuelement = $(document
+								.getElementById('menuForm:incidentReport'));
+						$menuelement.css("color", "rgb(1,121,190)");
+					});
+		</script>
+		<br />
+		<br />
+		<br />
+		<p:chart type="bar" model="#{reports.barModel}" style="height:300px" />
+
+
+	</ui:define>
+</ui:composition>

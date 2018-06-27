@@ -1,0 +1,115 @@
+<ui:composition template="templates/master-page.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<ui:define name="title">Incident Details</ui:define>
+
+	<ui:define name="content">
+		<script type="text/javascript">
+			$(document).ready(
+					function() {
+						var $menuelement = $(document
+								.getElementById('menuForm:allincidentlink'));
+						$menuelement.css("color", "rgb(1,121,190)");
+					});
+		</script>
+
+		<h:form id="investegationForm">
+			<p:growl id="messages" sticky="true" showDetail="true"
+				autoUpdate="true" />
+			<br />
+			<h:panelGrid columns="2">
+				<p:outputLabel value="Incident Date :" />
+				<p:outputLabel value="#{incidentDetails.incident.formatedDate}" />
+				<p:outputLabel value="Reporter :" />
+				<p:outputLabel value="#{incidentDetails.incident.reportedUser}" />
+				<p:outputLabel value="Incident Type:" />
+				<p:outputLabel
+					value="#{incidentDetails.incident.incidentType.typeName}" />
+				<p:outputLabel value="Incident Status:" />
+				<p:outputLabel value="#{incidentDetails.incident.status}" />
+				<p:outputLabel value="Item Value" />
+				<p:outputLabel value="#{incidentDetails.incident.itemValue}" />
+				<p:outputLabel value="Incident Location:" />
+				<p:outputLabel value="#{incidentDetails.incident.location}" />
+				<p:outputLabel value="Remarks:" />
+				<p:outputLabel value="#{incidentDetails.incident.remarks}" />
+			</h:panelGrid>
+			<br />
+			<p:panel id="questionsPanel" style="width:800px">
+				<br />
+				<h:panelGrid columns="1" width="600">
+					<p:dataList value="#{incidentDetails.questionAnswers}"
+						var="questAns">
+						<f:facet name="header">
+							Incident Questions and Answers
+					</f:facet>
+						<p:outputLabel value="Q : #{questAns.question}" style="" />
+						<br />
+						<p:outputLabel value="A : #{questAns.answer}"
+							style="font-size:x-large;" />
+						<br />
+					</p:dataList>
+				</h:panelGrid>
+			</p:panel>
+			<br />
+			<h:panelGrid id="requestInfoPanel" columns="2" width="100%">
+				<p:outputLabel value="Request More Info" />
+				<p:panel style="width:800px">
+					<ui:repeat var="MoreInfo"
+						value="#{incidentDetails.requestMoreInfos}">
+						<p:panel>
+							<h:panelGrid columns="2">
+								<p:graphicImage value="/images/user.png" height="30px" />
+								<p:outputLabel value="#{MoreInfo.user.email}" />
+								<p:outputLabel value="Request : "
+									style="color:red;font-weight: bold;" />
+								<p:outputLabel value="#{MoreInfo.requestBody}" />
+							</h:panelGrid>
+							<h:panelGrid columns="2">
+								<p:graphicImage value="/images/user.png" height="30px" />
+								<p:outputLabel value="#{MoreInfo.incident.reportedUser}" />
+								<p:outputLabel value="Reply : "
+									style="color:green;font-weight: bold;" />
+								<p:outputLabel value="#{MoreInfo.requestAnswer}"
+									rendered="#{MoreInfo.answeredOrNot}" />
+								<h:panelGrid columns="2"
+									rendered="#{MoreInfo.answeredOrNot!= true}">
+									<p:inputTextarea value="#{incidentDetails.replyText}" cols="40"
+										rows="2" />
+									<p:commandButton value="Reply"
+										actionListener="#{incidentDetails.replyAction}"
+										update=":investegationForm:requestInfoPanel :investegationForm:messages">
+										<f:attribute name="moreInfo" value="#{MoreInfo}" />
+									</p:commandButton>
+								</h:panelGrid>
+							</h:panelGrid>
+						</p:panel>
+						<br />
+					</ui:repeat>
+				</p:panel>
+			</h:panelGrid>
+			<br />
+
+			<h:panelGrid id="resultPanel" columns="2"
+				rendered="#{reporterInvest.result}" width="100%">
+				<p:outputLabel value="Investegation Result" />
+				<p:panel style="width:800px">
+					<h:panelGrid columns="2">
+						<p:graphicImage value="/images/user.png" height="30px" />
+						<p:outputLabel
+							value="#{reporterInvest.closeAction.actionBy.userFullName}" />
+						<p:outputLabel value="Result : "
+							style="color:blue;font-weight: bold;" />
+						<p:outputLabel value="#{reporterInvest.closeAction.trackComment}" />
+					</h:panelGrid>
+				</p:panel>
+			</h:panelGrid>
+			<br />
+		</h:form>
+	</ui:define>
+</ui:composition>

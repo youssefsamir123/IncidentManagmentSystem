@@ -1,0 +1,56 @@
+<ui:composition template="templates/master-page.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<ui:define name="title">All Incidents</ui:define>
+
+	<ui:define name="content">
+		<script type="text/javascript">
+			$(document).ready(
+					function() {
+						var $menuelement = $(document
+								.getElementById('menuForm:allincidentlink'));
+						$menuelement.css("color", "rgb(1,121,190)");
+					});
+		</script>
+		<h:form id="myIncidentsForm">
+			<p:dataTable id="taskDetailsTable" var="incident"
+				value="#{myIncident.incidents}"
+				filteredValue="#{myIncident.filteredIncidents}">
+				<p:column headerText="Incident Number"
+					filterBy="#{incident.incidentId}">
+					<p:outputLabel value="#{incident.incidentId}" />
+				</p:column>
+				<p:column headerText="Reporter User">
+					<p:outputLabel value="#{incident.reportedUser}" />
+				</p:column>
+				<p:column headerText="Incident Status" filterBy="#{incident.status}">
+					<p:outputLabel value="#{incident.status}" />
+				</p:column>
+				<p:column headerText="Incident Type"
+					filterBy="#{incident.incidentType.typeName}">
+					<p:outputLabel value="#{incident.incidentType.typeName}" />
+				</p:column>
+				<p:column headerText="Lost Item Value">
+					<p:outputLabel value="#{incident.itemValue}" />
+				</p:column>
+				<p:column headerText="Incident Date"
+					filterBy="#{incident.formatedDate}">
+					<p:outputLabel value="#{incident.formatedDate}" />
+				</p:column>
+				<p:column headerText="Preview">
+					<p:commandButton value="Preview"
+						action="#{myIncident.openIncidentPage}"
+						actionListener="#{myIncident.selectIncidentId}">
+						<f:attribute name="incidentId" value="#{incident.incidentId}" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+		</h:form>
+		
+	</ui:define>
+</ui:composition>

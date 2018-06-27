@@ -1,0 +1,83 @@
+<ui:composition template="templates/master-page.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	<ui:define name="title">Incident Types</ui:define>
+
+	<ui:define name="content">
+	<script type="text/javascript">
+	$(document).ready(function() 
+	{
+		var $menuelement = $(document.getElementById('menuForm:incidenttypeslink'));
+			$menuelement.css("color","rgb(1,121,190)");
+	});
+	</script>
+	
+		<h:form id="incidentTypesForm">
+		<p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+			<h:panelGrid id="typePanel" columns="3">
+				<p:outputLabel value="Type Name" />
+				<p:inputText id="newType" value="#{incidentType.newTypeName}" style="width:200px"/>
+				<p:commandButton value="Add New Type" action="#{incidentType.addnewType}" update="allTypes newType messages" />
+				
+				<p:outputLabel value="Select Incident Type" />
+				<h:selectOneMenu id="allTypes" value="#{incidentType.typeId}"  style="width:200px">
+					<f:selectItems value="#{incidentType.incidentTypes}" var="type" itemLabel="#{type.typeName}" itemValue="#{type.typeId}"/>
+					<f:ajax event="change" listener="#{incidentType.getTypeQuestions}" render=":incidentTypesForm:questionsTabel"/>
+				</h:selectOneMenu>
+				<p:commandButton value="Edit" action="#{incidentType.editType}" update="editType typeActive"/>
+				
+				<p:outputLabel value="Edit Type Name"/>
+				<p:inputText id="editType" value="#{incidentType.typeName}" disabled="#{incidentType.disabled}" style="width:200px"/>
+				<p:commandButton value="Save" action="#{incidentType.updateIncidentType}" update="editType messages typeActive allTypes typePanel"/>
+				
+				<p:outputLabel value="Type Active" />
+				<p:selectBooleanCheckbox id="typeActive" value="#{incidentType.typeActive}" />
+				<p:outputLabel/>
+			</h:panelGrid>
+			<br/>
+			<h:panelGrid columns="3" width="600">
+					<p:outputLabel value="Question Text "/>
+					<p:inputText id="questionText" value="#{incidentType.questionText}"  style="width:350px"/>
+					<p:commandButton value="Add New Question" action="#{incidentType.addNewQuestion}" update="questionsTabel questionText"/>
+			</h:panelGrid>
+			<br/>
+			
+			<p:dataTable id="questionsTabel" var="question" value="#{incidentType.questions}"
+											editable="true">
+				
+				<p:ajax event="rowEdit" listener="#{incidentType.updateQuestion}" update="questionsTabel :incidentTypesForm:messages" />
+       			<p:ajax event="rowEditCancel" />
+       				
+				<p:column headerText="Question">
+					<p:cellEditor>
+			            <f:facet name="output">
+			            	<p:outputLabel value="#{question.question}" />
+			            </f:facet>
+			             <f:facet name="input">
+			             		<p:inputText value="#{question.question}" required="true" requiredMessage="Please Enter The Question Text to Update It." />
+			               </f:facet>
+			      	</p:cellEditor>
+				</p:column>
+				<p:column headerText="Active">
+					<p:selectBooleanCheckbox  value="#{question.active}">
+						<p:ajax  listener="#{incidentType.updateQuestionStatus}" update="questionsTabel :incidentTypesForm:messages"/> 
+						<f:attribute name="targetquestion" value="#{question}" />
+					</p:selectBooleanCheckbox>
+				</p:column>
+				<p:column headerText="Mandatory">
+					<p:selectBooleanCheckbox  value="#{question.mandatory}">
+						<p:ajax  listener="#{incidentType.updateQuestionStatus}" update="questionsTabel :incidentTypesForm:messages"/> 
+						<f:attribute name="targetquestion" value="#{question}" />
+					</p:selectBooleanCheckbox>
+				</p:column>
+				<p:column width="8%">
+						<p:rowEditor />
+				</p:column>
+			</p:dataTable>
+		</h:form>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,238 @@
+<ui:composition template="templates/master-page.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<ui:define name="title">Incident Investegation</ui:define>
+
+	<ui:define name="content">
+		<script type="text/javascript">
+			$(document).ready(
+					function() {
+						var $menuelement = $(document
+								.getElementById('menuForm:allincidentlink'));
+						$menuelement.css("color", "rgb(1,121,190)");
+					});
+		</script>
+
+		<h:form id="investegationForm">
+			<p:growl id="messages" sticky="true" showDetail="true"
+				autoUpdate="true" />
+			<br />
+			<h:panelGrid columns="2">
+				<p:outputLabel value="Incident Date :" />
+				<p:outputLabel value="#{investigation.incident.formatedDate}" />
+				<p:outputLabel value="Reporter :" />
+				<p:outputLabel value="#{investigation.incident.reportedUser}" />
+				<p:outputLabel value="Incident Type:" />
+				<p:outputLabel
+					value="#{investigation.incident.incidentType.typeName}" />
+				<p:outputLabel value="Incident Status:" />
+				<p:outputLabel value="#{investigation.incident.status}" />
+				<p:outputLabel value="Item Value" />
+				<p:outputLabel value="#{investigation.incident.itemValue}" />
+				<p:outputLabel value="Incident Location:" />
+				<p:outputLabel value="#{investigation.incident.location}" />
+				<p:outputLabel value="Remarks:" />
+				<p:outputLabel value="#{investigation.incident.remarks}" />
+			</h:panelGrid>
+			<br />
+			<p:panel id="questionsPanel" style="width:800px;">
+				<br />
+				<h:panelGrid columns="1" width="600">
+					<p:dataList value="#{investigation.questionAnswers}" var="questAns">
+						<f:facet name="header">
+							Incident Questions and Answers
+						</f:facet>
+						<p:outputLabel value="Q : #{questAns.question}" style="" />
+						<br />
+						<p:outputLabel value="A : #{questAns.answer}"
+							style="font-size:x-large;" />
+						<br />
+					</p:dataList>
+				</h:panelGrid>
+			</p:panel>
+			<br />
+			<c:if
+				test="${(investigation.incident.status != 'Closed') and (investigation.userType != 'admin')}">
+				<p:spacer width="10" />
+				<p:menuButton value="Actions">
+					<p:menuitem value="Request More Info From Reporter"
+						onclick="PF('requestMoreInfoDialog').show();"
+						icon="ui-icon-mail-closed" />
+					<p:menuitem value="Add Investigation Note"
+						onclick="PF('investigationNoteDialog').show();"
+						icon="ui-icon-comment" />
+					<p:menuitem value="Add Suspect"
+						onclick="PF('suspectDialog').show();" icon="ui-icon-add" />
+					<p:separator />
+					<p:menuitem value="Close Investegation" icon="ui-icon-close"
+						onclick="PF('closeInvestigationDialog').show();" />
+				</p:menuButton>
+			</c:if>
+			<br />
+			<h:panelGrid id="requestInfoPanel" columns="2" width="100%">
+				<p:outputLabel value="Request More Info" />
+				<p:panel style="width:800px">
+					<ui:repeat var="MoreInfo" value="#{investigation.requestMoreInfos}">
+						<p:panel>
+							<h:panelGrid columns="2">
+								<p:graphicImage value="/images/user.png" height="30px" />
+								<p:outputLabel value="#{MoreInfo.user.email}" />
+								<p:outputLabel value="Request : "
+									style="color:red;font-weight: bold;" />
+								<p:outputLabel value="#{MoreInfo.requestBody}" />
+							</h:panelGrid>
+							<h:panelGrid columns="2">
+								<p:graphicImage value="/images/user.png" height="30px" />
+								<p:outputLabel value="#{MoreInfo.incident.reportedUser}" />
+								<p:outputLabel value="Reply : "
+									style="color:green;font-weight: bold;" />
+								<p:outputLabel value="#{MoreInfo.requestAnswer}" />
+							</h:panelGrid>
+						</p:panel>
+						<br />
+					</ui:repeat>
+				</p:panel>
+			</h:panelGrid>
+			<br />
+			<h:panelGrid id="investegationStepsPanel" columns="2" width="100%">
+				<p:outputLabel value="Incident Progress " />
+				<p:panel style="width:800px">
+					<ui:repeat var="investStep" value="#{investigation.notes}">
+						<p:panel>
+							<h:panelGrid columns="2">
+								<p:graphicImage value="/images/user.png" height="30px" />
+								<p:outputLabel value="#{investStep.user.email}" />
+								<p:outputLabel value="Step : "
+									style="color:blue;font-weight: bold;" />
+								<p:outputLabel value="#{investStep.noteBody}" />
+							</h:panelGrid>
+						</p:panel>
+						<br />
+					</ui:repeat>
+				</p:panel>
+			</h:panelGrid>
+			<br />
+			<h:panelGrid id="suspectPanel" columns="2" width="100%">
+				<p:outputLabel value="Incident Suspects " />
+				<p:panel style="width:800px">
+					<ui:repeat var="suspect" value="#{investigation.suspects}">
+						<p:panel>
+							<h:panelGrid columns="2">
+								<p:graphicImage value="/images/user.png" height="30px" />
+								<p:outputLabel value="#{suspect.user.email}" />
+								<p:outputLabel value="Suspect : "
+									style="color:black;font-weight: bold;" />
+								<p:outputLabel value="#{suspect.suspectName}" />
+							</h:panelGrid>
+						</p:panel>
+						<br />
+					</ui:repeat>
+				</p:panel>
+			</h:panelGrid>
+
+			<h:panelGrid id="resultPanel" columns="2" width="100%">
+				<p:outputLabel value="Incident Result" />
+				<p:panel style="width:800px">
+					<h:panelGrid columns="2">
+						<p:graphicImage value="/images/user.png" height="30px" />
+						<p:outputLabel
+							value="#{investigation.incident.securityUser.email}" />
+						<p:outputLabel value="Result : "
+							style="color:blue;font-weight: bold;" />
+						<p:outputLabel value="#{investigation.incident.result}" />
+					</h:panelGrid>
+				</p:panel>
+			</h:panelGrid>
+			<br />
+		</h:form>
+
+		<p:dialog widgetVar="requestMoreInfoDialog" position="true"
+			positionType="center center" header="Request More Info Dialog"
+			height="200" width="500">
+			<h:form id="requestMoreInfoForm">
+				<h:panelGrid columns="2">
+					<p:outputLabel value="Request Body" />
+					<p:inputTextarea id="requestBody"
+						value="#{investigation.requestBody}" rows="10" cols="50" />
+				</h:panelGrid>
+				<br />
+				<p:commandButton value="Send Request"
+					actionListener="#{investigation.requestMoreInfo}"
+					oncomplete="PF('requestMoreInfoDialog').hide();"
+					update=":investegationForm:messages :investegationForm:requestInfoPanel :requestMoreInfoForm:requestBody"
+					style="width:150px;" />
+				<p:spacer width="10" />
+				<p:commandButton value="Cancel" style="width:100px;"
+					onclick="PF('requestMoreInfoDialog').hide();" />
+			</h:form>
+		</p:dialog>
+
+		<p:dialog widgetVar="investigationNoteDialog" position="true"
+			positionType="center center" header="Add investigation Step OR Note"
+			height="200" width="500">
+			<h:form id="addNoteForm">
+				<h:panelGrid columns="2">
+					<p:outputLabel value="Note Body" />
+					<p:inputTextarea id="noteBodyTXT" value="#{investigation.noteBody}"
+						rows="10" cols="50" />
+				</h:panelGrid>
+				<br />
+				<p:commandButton value="Add Note"
+					actionListener="#{investigation.addInvestigationNote}"
+					oncomplete="PF('investigationNoteDialog').hide();"
+					update=":investegationForm:messages :investegationForm:investegationStepsPanel :addNoteForm:noteBodyTXT"
+					style="width:150px;" />
+				<p:spacer width="10" />
+				<p:commandButton value="Cancel" style="width:100px;"
+					onclick="PF('investigationNoteDialog').hide();" />
+			</h:form>
+		</p:dialog>
+
+		<p:dialog widgetVar="suspectDialog" header="Add Suspect" height="150"
+			width="400" position="true" positionType="center center">
+			<h:form id="addSuspectForm">
+				<h:panelGrid columns="2">
+					<p:outputLabel value="Suspect Name" />
+					<p:inputTextarea id="suspectNameTXT"
+						value="#{investigation.suspectName}" rows="5" cols="40" />
+				</h:panelGrid>
+				<br />
+				<p:commandButton value="Add Suspect"
+					actionListener="#{investigation.addSuspect}"
+					oncomplete="PF('suspectDialog').hide();"
+					update=":investegationForm:messages :investegationForm:suspectPanel :addSuspectForm:suspectNameTXT"
+					style="width:150px;" />
+				<p:spacer width="10" />
+				<p:commandButton value="Cancel" style="width:100px;"
+					onclick="PF('suspectDialog').hide();" />
+			</h:form>
+		</p:dialog>
+
+		<p:dialog widgetVar="closeInvestigationDialog"
+			header="Close The Incident" height="150" width="600" position="true"
+			positionType="center center">
+			<h:form id="closeInvestigationForm">
+				<h:panelGrid columns="2">
+					<p:outputLabel value="Investigation Result" />
+					<p:inputTextarea value="#{investigation.investigationResult}"
+						rows="5" cols="50" />
+				</h:panelGrid>
+				<br />
+				<p:commandButton value="Close The Incident"
+					actionListener="#{investigation.closeTheIncident}"
+					oncomplete="PF('closeInvestigationDialog').hide();"
+					update=":investegationForm :investegationForm:resultPanel"
+					style="width:150px;" />
+				<p:spacer width="10" />
+				<p:commandButton value="Cancel" style="width:100px;"
+					onclick="PF('closeInvestigationDialog').hide();" />
+			</h:form>
+		</p:dialog>
+
+	</ui:define>
+</ui:composition>

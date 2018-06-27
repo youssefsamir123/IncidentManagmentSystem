@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+					  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html 	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	 <link rel="stylesheet" type="text/css" href="css/template.css"/>
+	<title>
+		<ui:insert name="title">Some title</ui:insert>
+	</title>
+	 <style>
+	 	.ui-widget {
+				  font-size: 75% !important;
+				}
+		.ui-widget .ui-widget {
+				  font-size: 100% !important;
+				}
+		
+		.ui-growl {
+			top:40%;
+			right:40%;
+		}
+		.ui-datatable-even {
+			background-color: lightgray;
+			background-image: none;
+		}
+		.ui-datatable-odd {
+			/*background-color: gray;*/
+			background-image: none;
+		}
+		.ui-datepicker-current-day .ui-state-active {
+		    background: red;
+		    color: blue;
+		    font: bold;
+		}
+		.ui-datepicker-today .ui-state-active {
+		    background: red;
+		    color: blue;
+		    font: bold;
+		}
+		.ui-tabs-left > .ui-tabs-nav {
+		    float: left;
+		    width: 14%;
+		    height: 800px;
+		    background-image: none;
+		    padding-top: 1px;
+		}
+		.ui-tabs-left > .ui-tabs-panels {
+		    float: left;
+		    width: 85%;
+		}
+		.ui-icon-check {
+			zoom:1;
+		}
+		.ui-icon-close {
+			zoom:1;
+		}
+		.ui-icon-pencil {
+			zoom:1;
+		}
+		 .ui-column-filter {
+			width: 95% !important;
+		 }
+		/* .input {
+		 	max-width: 50px !important;
+		 	min-width: 100px !important;
+		 } */
+	 </style>
+</h:head>
+		<h:body>
+				<div id="header">
+					<ui:include src="header.xhtml" />
+				</div>
+				
+				<div id="menu">
+					<ui:include src="menu.xhtml" />
+				</div>
+				
+				<div id="content">
+					<ui:insert name="content"> Content </ui:insert>
+				</div>
+		</h:body>
+</html>		

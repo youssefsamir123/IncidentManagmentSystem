@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<h:head>
+	<title>jQuery Accordion Menu</title>
+	<link rel="stylesheet" type="text/css" href="css/accordionmenu.css" />
+	<style type="text/css">
+#wrapper-250 {
+	width: 220px;
+	margin: 0 auto;
+	margin-left: -5px;
+}
+</style>
+</h:head>
+
+<h:body>
+	<h:form id="menuForm">
+		<div id="wrapper-250">
+			<c:if test="${sessionScope.userType == 'reporter'}">
+				<ul class="accordion">
+					<li><a href="#one">Incidents</a>
+						<ul class="sub-menu">
+							<li><p:commandLink id="newincidentlink"
+									style="font-size:15px;" value="New Incident"
+									action="#{navigation.newIncident}" /></li>
+							<li><p:commandLink id="allincidentlink"
+									style="font-size:15px;" value="My Incidents"
+									action="#{navigation.allIncidents}" /></li>
+							<li><p:commandLink id="emergencyLink"
+									style="font-size:15px;" value="Emergency"
+									action="#{navigation.emergencyPage}" /></li>
+						</ul></li>
+				</ul>
+			</c:if>
+
+			<c:if test="${sessionScope.userType == 'security'}">
+				<ul class="accordion">
+					<li><a href="#one">Incidents</a>
+						<ul class="sub-menu">
+							<li><p:commandLink id="allincidentlink"
+									style="font-size:15px;" value="All Incidents"
+									action="#{navigation.allIncidents}" /></li>
+							<li><p:commandLink id="emergencyLink"
+									style="font-size:15px;" value="Emergency"
+									action="#{navigation.emergencyPage}" /></li>
+						</ul></li>
+				</ul>
+			</c:if>
+			
+			<c:if test="${sessionScope.userType == 'admin'}">
+				<ul class="accordion">
+					<li><a href="#one">Incidents</a>
+						<ul class="sub-menu">
+							<li><p:commandLink id="allincidentlink"
+									style="font-size:15px;" value="All Incidents"
+									action="#{navigation.allIncidents}" /></li>
+							<li><p:commandLink id="incidenttypeslink"
+									style="font-size:15px;" value="Incident Types"
+									action="#{navigation.incidentTypes}" /></li>
+							<li><p:commandLink id="emergencyLink"
+									style="font-size:15px;" value="Emergency"
+									action="#{navigation.emergencyPage}" /></li>
+							<li><p:commandLink id="incidentReport"
+									style="font-size:15px;" value="Incident Report"
+									action="#{navigation.reportPage}" /></li>
+						</ul></li>
+				</ul>
+			</c:if>
+		</div>
+	</h:form>
+
+	<script type="text/javascript"
+		src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+
+</h:body>
+
+</html>
